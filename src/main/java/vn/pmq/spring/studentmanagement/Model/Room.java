@@ -1,8 +1,28 @@
 package vn.pmq.spring.studentmanagement.Model;
 
+import jakarta.persistence.*;
+
+import java.util.List;
+
+@Entity
+@Table(name = "room")
 public class Room {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "room_id")
     private int roomId;
+    @Column(name = "room_code",length = 5,nullable = false)
     private String roomCode;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {
+            CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.REFRESH,CascadeType.DETACH
+    })
+    @JoinTable(
+            name = "room_schedule",
+            joinColumns = @JoinColumn(name = "room_id"),
+            inverseJoinColumns = @JoinColumn(name = "schedule_id")
+    )
+    private List<Schedule> schedules;
 
     public Room() {
     }

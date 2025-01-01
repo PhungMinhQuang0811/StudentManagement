@@ -1,11 +1,41 @@
 package vn.pmq.spring.studentmanagement.Model;
 
-import java.sql.Timestamp;
+import jakarta.persistence.*;
 
+import java.sql.Timestamp;
+import java.util.List;
+
+@Entity
+@Table(name = "schedule")
 public class Schedule {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "schedule_id")
     private int scheduleId;
+    @Column(name = "time_table")
     private Timestamp timeTable;
+    @Column(name = "slot")
     private int slot;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {
+            CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.REFRESH,CascadeType.DETACH
+    })
+    @JoinTable(
+            name = "class_schedule",
+            joinColumns = @JoinColumn(name = "schedule_id"),
+            inverseJoinColumns = @JoinColumn(name = "class_id")
+    )
+    private List<Class> classes;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {
+            CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.REFRESH,CascadeType.DETACH
+    })
+    @JoinTable(
+            name = "room_schedule",
+            joinColumns = @JoinColumn(name = "schedule_id"),
+            inverseJoinColumns = @JoinColumn(name = "room_id")
+    )
+    private List<Room> rooms;
 
     public Schedule() {
     }

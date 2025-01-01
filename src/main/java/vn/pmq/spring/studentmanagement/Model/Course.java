@@ -1,11 +1,66 @@
 package vn.pmq.spring.studentmanagement.Model;
 
+import jakarta.persistence.*;
+
+import java.util.List;
+
+@Entity
+@Table(name = "course")
 public class Course {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "course_id")
     private int courseId;
+    @Column(name = "course_code",length = 10,nullable = false)
     private String courseCode;
+    @Column(name = "course_name",length = 50,nullable = false)
     private String courseName;
+    @Column(name = "term_no",nullable = false)
     private int termNo;
+    @Column(name = "number_of_slot",nullable = false)
     private int numberOfSlots;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {
+            CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.REFRESH,CascadeType.DETACH
+    })
+    @JoinTable(
+            name = "account_course",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "account_id")
+    )
+    private List<Account> accounts;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = {
+            CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.REFRESH,CascadeType.DETACH
+    })
+    @JoinColumn(name = "prerequisite_id")
+    private Prerequisite prerequisite;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {
+            CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.REFRESH,CascadeType.DETACH
+    })
+    @JoinTable(
+            name = "course_attendance",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "attendance_id")
+    )
+    private List<Attendance> attendances;
+    @OneToMany(mappedBy = "course",fetch = FetchType.LAZY, cascade = {
+            CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.REFRESH,CascadeType.DETACH
+    })
+    private List<Feedback> feedbacks;
+    @OneToOne(mappedBy = "course",fetch = FetchType.LAZY, cascade = {
+            CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.REFRESH,CascadeType.DETACH
+    })
+    private CourseGrade courseGrade;
+    @OneToOne(mappedBy = "course",fetch = FetchType.LAZY, cascade = {
+            CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.REFRESH,CascadeType.DETACH
+    })
+    private Mark mark;
 
     public Course() {
     }

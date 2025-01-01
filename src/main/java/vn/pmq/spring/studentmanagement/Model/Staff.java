@@ -1,11 +1,31 @@
 package vn.pmq.spring.studentmanagement.Model;
 
-public class Staff {
-    private int staffId;
-    private String position;
-    private String memberCode;
-    private String major;
+import jakarta.persistence.*;
 
+import java.util.List;
+
+@Entity
+@Table(name = "staff")
+public class Staff {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "staff_id")
+    private int staffId;
+    @Column(name = "position",length = 25,nullable = false)
+    private String position;
+    @Column(name = "member_code",length = 50,nullable = false)
+    private String memberCode;
+    @Column(name = "staff_code",length = 10,nullable = false)
+    private String staffCode;
+    @Column(name = "major",length = 25,nullable = false)
+    private String major;
+    @OneToOne(mappedBy = "staff",cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    private Account account;
+    @OneToMany(mappedBy = "staff",fetch = FetchType.LAZY, cascade = {
+            CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.REFRESH,CascadeType.DETACH
+    })
+    private List<Feedback> feedbacks;
     public Staff(int staffId, String position, String memberCode, String major) {
         this.staffId = staffId;
         this.position = position;
@@ -42,6 +62,14 @@ public class Staff {
 
     public String getMajor() {
         return major;
+    }
+
+    public String getStaffCode() {
+        return staffCode;
+    }
+
+    public void setStaffCode(String staffCode) {
+        this.staffCode = staffCode;
     }
 
     public void setMajor(String major) {

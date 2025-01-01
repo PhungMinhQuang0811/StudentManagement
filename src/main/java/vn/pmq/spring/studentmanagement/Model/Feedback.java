@@ -1,19 +1,36 @@
 package vn.pmq.spring.studentmanagement.Model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "feedback")
 public class Feedback {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "feedback_id")
     private int feedbackId;
-    private int courseId;
-    private int staffId;
+    @Column(name = "rate",nullable = false)
     private float rate;
+    @Column(name = "comment",length = 256)
     private String comment;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {
+            CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.REFRESH,CascadeType.DETACH
+    })
+    @JoinColumn(name = "course_id", nullable = false)
+    private Course course;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {
+            CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.REFRESH,CascadeType.DETACH
+    })
+    @JoinColumn(name = "staff_id", nullable = false)
+    private Staff staff;
 
     public Feedback() {
     }
 
-    public Feedback(int feedbackId, int courseId, int staffId, float rate, String comment) {
+    public Feedback(int feedbackId, float rate, String comment) {
         this.feedbackId = feedbackId;
-        this.courseId = courseId;
-        this.staffId = staffId;
         this.rate = rate;
         this.comment = comment;
     }
@@ -24,22 +41,6 @@ public class Feedback {
 
     public void setFeedbackId(int feedbackId) {
         this.feedbackId = feedbackId;
-    }
-
-    public int getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(int courseId) {
-        this.courseId = courseId;
-    }
-
-    public int getStaffId() {
-        return staffId;
-    }
-
-    public void setStaffId(int staffId) {
-        this.staffId = staffId;
     }
 
     public float getRate() {

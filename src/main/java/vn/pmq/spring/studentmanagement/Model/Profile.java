@@ -1,16 +1,33 @@
 package vn.pmq.spring.studentmanagement.Model;
 
+import jakarta.persistence.*;
+
+import java.sql.Blob;
 import java.sql.Date;
 
+@Entity
+@Table(name = "profile")
 public class Profile {
+    @Id
+    @Column(name = "account_id")
     private int accountId;
+    @Column(name = "id_card",nullable = false)
     private String idCard;
+    @Column(name = "address")
     private String address;
+    @Column(name = "gender",nullable = false)
     private boolean gender;
-    private String avatar;
+    @Column(name = "avatar")
+    @Lob
+    private Blob avatar;
+    @Column(name = "date_of_birth")
     private Date dateOfBirth;
+    @OneToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "account_id")
+    @MapsId
+    private Account account;
 
-    public Profile(int accountId, String ID_card, String address, boolean gender, String avatar, Date dateOfBirth) {
+    public Profile(int accountId, String ID_card, String address, boolean gender, Blob avatar, Date dateOfBirth) {
         this.accountId = accountId;
         this.idCard = idCard;
         this.address = address;
@@ -54,11 +71,11 @@ public class Profile {
         this.gender = gender;
     }
 
-    public String getAvatar() {
+    public Blob getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(String avatar) {
+    public void setAvatar(Blob avatar) {
         this.avatar = avatar;
     }
 

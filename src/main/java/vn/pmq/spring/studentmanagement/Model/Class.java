@@ -1,30 +1,60 @@
 package vn.pmq.spring.studentmanagement.Model;
 
+import jakarta.persistence.*;
+
+import java.util.List;
+
+@Entity
+@Table(name = "class")
 public class Class {
-    private int class_id;
-    private String class_code;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "class_id")
+    private int classId;
+    @Column(name = "class_code",length = 10,nullable = false)
+    private String classCode;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {
+            CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.REFRESH,CascadeType.DETACH
+    })
+    @JoinTable(
+            name = "account_class",
+            joinColumns = @JoinColumn(name = "class_id"),
+            inverseJoinColumns = @JoinColumn(name = "account_id")
+    )
+    private List<Account> accounts;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {
+            CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.REFRESH,CascadeType.DETACH
+    })
+    @JoinTable(
+            name = "class_schedule",
+            joinColumns = @JoinColumn(name = "class_id"),
+            inverseJoinColumns = @JoinColumn(name = "schedule_id")
+    )
+    private List<Schedule> schedules;
 
     public Class() {
     }
 
-    public Class(int class_id, String class_code) {
-        this.class_id = class_id;
-        this.class_code = class_code;
+    public Class(int classId, String classCode) {
+        this.classId = classId;
+        this.classCode = classCode;
     }
 
-    public int getClass_id() {
-        return class_id;
+    public int getclassId() {
+        return classId;
     }
 
-    public void setClass_id(int class_id) {
-        this.class_id = class_id;
+    public void setclassId(int classId) {
+        this.classId = classId;
     }
 
-    public String getClass_code() {
-        return class_code;
+    public String getclassCode() {
+        return classCode;
     }
 
-    public void setClass_code(String class_code) {
-        this.class_code = class_code;
+    public void setclassCode(String classCode) {
+        this.classCode = classCode;
     }
 }

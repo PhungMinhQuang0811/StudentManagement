@@ -1,8 +1,20 @@
 package vn.pmq.spring.studentmanagement.Model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "finance")
 public class Finance {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "student_id")
     private int studentId;
+    @Column(name = "account_balance")
     private int accountBalance;
+    @OneToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @MapsId
+    @JoinColumn(name = "student_id")
+    private Student student;
 
     public Finance() {
     }
