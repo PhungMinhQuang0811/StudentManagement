@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Course Management</title>
+    <!-- Bootstrap CSS -->
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+</head>
+<body>
+<div class="container mt-5">
+    <!-- Trigger/Open The Modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AddModal">
+        Open Modal
+    </button>
+
+    <!-- The Modal -->
+    <div class="modal fade" id="AddModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Modal Title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <!-- Nội dung modal của bạn ở đây -->
+                    <form action="/CourseManagement/addCourse" method="get">
+                        <div class="mb-3">
+                            <label for="courseCode" class="form-label">Course Code:</label>
+                            <input type="text" class="form-control" id="courseCode" name="courseCode" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="courseName" class="form-label">Course Name:</label>
+                            <input type="text" class="form-control" id="courseName" name="courseName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="numberOfSlots" class="form-label">Number of Slots:</label>
+                            <input type="number" class="form-control" id="numberOfSlots" name="numberOfSlots" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="termNo" class="form-label">Term No:</label>
+                            <input type="number" class="form-control" id="termNo" name="termNo" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="prerequisiteId" class="form-label">Prerequisite Course:</label>
+                            <select name="prerequisiteId" class="form-select" id="prerequisiteId">
+                                <option value="">Select Prerequisite</option>
+                                <!-- Bạn có thể sử dụng Thymeleaf hoặc dữ liệu từ controller ở đây -->
+                                <option value="1">Course 1</option>
+                                <option value="2">Course 2</option>
+                                <option value="3">Course 3</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Course</button>
+                    </form>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <h1 class="text-center">Course List</h1>
+    <table border="1" class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Course ID</th>
+            <th>Course Code</th>
+            <th>Course Name</th>
+            <th>Term No</th>
+            <th>Number of Slots</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="course : ${courseList}">
+            <td th:text="${course.getCourseId()}"></td>
+            <td th:text="${course.getCourseCode()}"></td>
+            <td th:text="${course.getCourseName()}"></td>
+            <td th:text="${course.getTermNo()}"></td>
+            <td th:text="${course.getNumberOfSlots()}"></td>
+            <td>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateModal">
+                    Update
+                </button>
+                <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="myModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+
+                            <!-- Modal Header -->
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="myModal">Modal Title</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                            </div>
+
+                            <!-- Modal Body -->
+                            <div class="modal-body">
+                                <form action="/CourseManagement/updateCourse" method="get">
+                                    <input type="hidden" name="courseId" th:value="${course.getCourseId()}">
+                                    <div>
+                                        <label for="updateCourseCode">Course Code:</label>
+                                        <input type="text" id="updateCourseCode" name="courseCode"
+                                               th:value="${course.getCourseCode()}"
+                                               required>
+                                    </div>
+                                    <div>
+                                        <label for="updateCourseName">Course Name:</label>
+                                        <input type="text" id="updateCourseName" name="courseName"
+                                               th:value="${course.getCourseName()}"
+                                               required>
+                                    </div>
+                                    <div>
+                                        <label for="updateNumberOfSlots">Number of Slots:</label>
+                                        <input type="number" id="updateNumberOfSlots" name="numberOfSlots"
+                                               th:value="${course.getNumberOfSlots()}" required>
+                                    </div>
+                                    <div>
+                                        <label for="updateTermNo">Term No:</label>
+                                        <input type="number" id="updateTermNo" name="termNo"
+                                               th:value="${course.getTermNo()}" required>
+                                    </div>
+                                    <button type="submit">Update</button>
+                                </form>
+                            </div>
+
+                            <!-- Modal Footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <form action="/CourseManagement/deleteCourse" method="get" style="display:inline;">
+                    <input type="hidden" name="courseId" th:value="${course.getCourseId()}">
+                    <button type="submit"
+                            onclick="return confirm('Are you sure you want to delete this course?');">
+                        Delete
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>
