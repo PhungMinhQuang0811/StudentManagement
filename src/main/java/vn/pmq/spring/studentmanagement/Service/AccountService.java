@@ -10,4 +10,5 @@ public interface AccountService {
     public Account addAccount(Account account);
     public Account updateAccount(Account account);
     public Account changeStatus(int id);
+    public List<Account> findByUsernameContaining(String username);
 }

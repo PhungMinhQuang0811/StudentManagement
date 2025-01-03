@@ -8,6 +8,10 @@
 <body>
 <div class="container">
     <h3>Account Management</h3>
+    <form th:action="@{/accounts/search}" method="get" class="d-inline">
+        <input type="text" name="username" class="form-control d-inline w-auto" placeholder="Search by username">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAccountModal">
         Add New Account
     </button>
@@ -81,8 +85,8 @@
                                     <input type="text" class="form-control"  name="password" th:value="${account.getPassword()}" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="role" class="form-label">Role</label>
-                                    <select class="form-select" name="roleIds" multiple required>
+                                    <label for="roleIds" class="form-label">Role</label>
+                                    <select class="form-select" id="roleIds" name="roleIds" multiple required>
                                         <option value="" disabled>Select roles</option>
                                         <option th:each="role : ${roles}"
                                                 th:value="${role.getroleId()}"
@@ -130,9 +134,8 @@
                         <input type="text" class="form-control" id="password" name="password" th:field="*{password}" required>
                     </div>
                     <div class="mb-3">
-                        <label for="role" class="form-label">Role</label>
-                        <select class="form-select" id="role" name="roleId" required>
-                            <option value="" disabled selected>Select a role</option>
+                        <label for="roles" class="form-label">Role</label>
+                        <select class="form-select" id="roles" name="roleIds" multiple required>
                             <option th:each="role : ${roles}"
                                     th:value="${role.getroleId()}"
                                     th:text="${role.getName()}">

@@ -11,5 +11,8 @@ import java.util.List;
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Integer> {
     @Query("SELECT a.accountId, r.roleId FROM Account a JOIN a.roles r WHERE a.accountId = :accountId")
-    List<Object[]> findRoleIdsByAccountId(@Param("accountId") int accountId);
+    public List<Object[]> findRoleIdsByAccountId(@Param("accountId") int accountId);
+
+    List<Account> findByUserNameContainingIgnoreCase(String userName);
+
 }

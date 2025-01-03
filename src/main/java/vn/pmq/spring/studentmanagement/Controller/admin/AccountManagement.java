@@ -39,10 +39,10 @@ public class AccountManagement {
     }
     //add
     @PostMapping("/addAccount")
-    public String addAccount(@ModelAttribute("newAccount") Account account,@RequestParam("roleId") int roleId) {
-        Role role = roleService.findById(roleId);
-        account.setRoles(Collections.singletonList(role));
+    public String addAccount(@ModelAttribute("newAccount") Account account,@RequestParam("roleIds") List<Integer> roles) {
+        List<Role> roleList = roleService.getRolesByIds(roles);
         account.setUserName(account.getFirstName() + account.getFirstCharOfLastName() + (accountDAO.getMaxId()+1));
+        account.setRoles(roleList);
         accountService.addAccount(account);
         return "redirect:/accounts/list"; // Redirect to account management page
     }
@@ -75,5 +75,16 @@ public class AccountManagement {
     public String changeStatus(@RequestParam("id") int acccountId){
         accountService.changeStatus(acccountId);
         return "redirect:/accounts/list";
+    }
+    @GetMapping("/search")
+    public String search(@RequestParam("username") String username,Model model) {
+        List<Account> listAccounts = accountService.findByUsernameContaining(username);
+        List<Role> roles = roleService.findAll();
+        Account account = new Account();
+        model.addAttribute("accounts", listAccounts);
+        model.addAttribute("roles", roles);
+        //add
+        model.addAttribute("newAccount", account);
+        return "admin/accountManagement";
     }
 }

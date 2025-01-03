@@ -58,6 +58,12 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountRepository.getById(id);
         return accountDAO.changeStatus(account);
     }
+
+    @Override
+    public List<Account> findByUsernameContaining(String username) {
+        return accountRepository.findByUserNameContainingIgnoreCase(username);
+    }
+
     @Transactional
     public void addRoles(int id, List<Integer> listRoleId) {
         Account account = accountRepository.getById(id);

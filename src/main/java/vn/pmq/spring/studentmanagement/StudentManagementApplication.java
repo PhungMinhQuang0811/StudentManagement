@@ -27,6 +27,7 @@ public class StudentManagementApplication {
                 System.out.println("Account ID: " + obj[0] + ", Role ID: " + obj[1]);
             }
             System.out.println(account.getFirstName() + account.getFirstCharOfLastName() + (account.getAccountId()+1));
+            System.out.println(accountService.findByUsernameContaining("quanht"));
 //            List<Integer> listRoles = new ArrayList<>();
 //            listRoles.add(1);
 //            listRoles.add(2);
