@@ -30,7 +30,7 @@ public class Course {
     )
     private List<Account> accounts;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = {
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {
             CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.REFRESH,CascadeType.DETACH
     })

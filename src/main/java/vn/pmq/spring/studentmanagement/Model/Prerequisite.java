@@ -2,6 +2,8 @@ package vn.pmq.spring.studentmanagement.Model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "prerequisite")
 public class Prerequisite {
@@ -13,11 +15,11 @@ public class Prerequisite {
     private String name;
     @Column(name = "course_code",length = 10,nullable = false)
     private String courseCode;
-    @OneToOne(mappedBy = "prerequisite",fetch = FetchType.LAZY, cascade = {
+    @OneToMany(mappedBy = "prerequisite",fetch = FetchType.LAZY, cascade = {
             CascadeType.PERSIST, CascadeType.MERGE,
             CascadeType.REFRESH,CascadeType.DETACH
     })
-    private Course course;
+    private List<Course> courses;
     public Prerequisite(int prerequisiteId, String name) {
         this.prerequisiteId = prerequisiteId;
         this.name = name;

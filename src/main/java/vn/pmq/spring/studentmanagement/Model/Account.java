@@ -1,6 +1,7 @@
 package vn.pmq.spring.studentmanagement.Model;
 
 import jakarta.persistence.*;
+import org.apache.logging.log4j.util.StringBuilders;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -111,6 +112,78 @@ public class Account {
         this.password = password;
     }
 
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    public Parent getParent() {
+        return parent;
+    }
+
+    public void setParent(Parent parent) {
+        this.parent = parent;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public Staff getStaff() {
+        return staff;
+    }
+
+    public void setStaff(Staff staff) {
+        this.staff = staff;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public Account(String userName, String password, String email, String phone, String fullName) {
+        this.userName = userName;
+        this.password = password;
+        this.email = email;
+        this.phone = phone;
+        this.fullName = fullName;
+    }
+
+    public List<Class> getClasses() {
+        return classes;
+    }
+
+    public void setClasses(List<Class> classes) {
+        this.classes = classes;
+    }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -125,5 +198,35 @@ public class Account {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "accountId=" + accountId +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", fullName='" + fullName + '\'' +
+                '}';
+    }
+    public String getFirstName() {
+        String trimmed = this.fullName.trim();
+        int a = trimmed.lastIndexOf(" ");
+        String name = trimmed.substring(a+1);
+        return name;
+    }
+    public String getFirstCharOfLastName() {
+        String trimmed = this.fullName.trim();
+        String[] nameParts = trimmed.split(" ");
+        if (nameParts.length < 2) {
+            return ""; // Return empty string if there are no last names
+        }
+        StringBuilder sb = new StringBuilder();
+        for(int i=0; i<nameParts.length-1; i++) {
+            sb.append(nameParts[i].charAt(0));
+        }
+        return sb.toString();
     }
 }
