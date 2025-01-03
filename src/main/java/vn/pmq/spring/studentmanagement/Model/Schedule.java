@@ -36,6 +36,9 @@ public class Schedule {
             inverseJoinColumns = @JoinColumn(name = "room_id")
     )
     private List<Room> rooms;
+    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH},fetch = FetchType.LAZY)
+    @JoinColumn(name = "status_id",nullable = false)
+    private Status status;
 
     public Schedule() {
     }

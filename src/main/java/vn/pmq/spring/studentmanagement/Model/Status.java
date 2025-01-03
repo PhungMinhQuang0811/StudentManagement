@@ -31,6 +31,26 @@ public class Status {
             CascadeType.REFRESH,CascadeType.DETACH
     })
     private List<Attendance> attendances;
+    @OneToMany(mappedBy = "status",fetch = FetchType.LAZY, cascade = {
+            CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.REFRESH,CascadeType.DETACH
+    })
+    private List<Course> courses;
+    @OneToMany(mappedBy = "status",fetch = FetchType.LAZY, cascade = {
+            CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.REFRESH,CascadeType.DETACH
+    })
+    private List<Class> classes;
+    @OneToMany(mappedBy = "status",fetch = FetchType.LAZY, cascade = {
+            CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.REFRESH,CascadeType.DETACH
+    })
+    private List<Schedule> schedules;
+    @OneToMany(mappedBy = "status",fetch = FetchType.LAZY, cascade = {
+            CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.REFRESH,CascadeType.DETACH
+    })
+    private List<Room> rooms;
     public Status(int statusId, String name) {
         this.statusId = statusId;
         this.name = name;

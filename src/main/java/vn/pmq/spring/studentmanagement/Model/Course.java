@@ -61,6 +61,9 @@ public class Course {
             CascadeType.REFRESH,CascadeType.DETACH
     })
     private Mark mark;
+    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH},fetch = FetchType.LAZY)
+    @JoinColumn(name = "status_id",nullable = false)
+    private Status status;
 
     public Course() {
     }
