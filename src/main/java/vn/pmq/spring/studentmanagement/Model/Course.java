@@ -88,6 +88,62 @@ public class Course {
         return courseCode;
     }
 
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
+    }
+
+    public Prerequisite getPrerequisite() {
+        return prerequisite;
+    }
+
+    public void setPrerequisite(Prerequisite prerequisite) {
+        this.prerequisite = prerequisite;
+    }
+
+    public List<Attendance> getAttendances() {
+        return attendances;
+    }
+
+    public void setAttendances(List<Attendance> attendances) {
+        this.attendances = attendances;
+    }
+
+    public List<Feedback> getFeedbacks() {
+        return feedbacks;
+    }
+
+    public void setFeedbacks(List<Feedback> feedbacks) {
+        this.feedbacks = feedbacks;
+    }
+
+    public CourseGrade getCourseGrade() {
+        return courseGrade;
+    }
+
+    public void setCourseGrade(CourseGrade courseGrade) {
+        this.courseGrade = courseGrade;
+    }
+
+    public Mark getMark() {
+        return mark;
+    }
+
+    public void setMark(Mark mark) {
+        this.mark = mark;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     public void setCourseCode(String courseCode) {
         this.courseCode = courseCode;
     }
@@ -116,19 +172,4 @@ public class Course {
         this.numberOfSlots = numberOfSlots;
     }
 
-    public Prerequisite getPrerequisite() {
-        return prerequisite;
-    }
-
-    public void setPrerequisite(Prerequisite prerequisite) {
-        this.prerequisite = prerequisite;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
 }

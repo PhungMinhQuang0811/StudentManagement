@@ -29,11 +29,14 @@ public class CourseManagementController {
         List<Prerequisite> ps = prerequisiteRepository.findAll();
         model.addAttribute("preList", ps);
         model.addAttribute("courseList", ls);
+        //add
+        Course course = new Course();
+        model.addAttribute("newCourse", course);
         return "Course/CourseManagement";
     }
 
     @PostMapping("/addCourse")
-    public String addCourse(@ModelAttribute Course course, @RequestParam Long prerequisiteId) {
+    public String addCourse(@ModelAttribute("newCourse") Course course, @RequestParam Long prerequisiteId) {
         Prerequisite prerequisite = prerequisiteRepository.findById(prerequisiteId).orElse(null);
         if (prerequisite != null) {
             course.setPrerequisite(prerequisite);
