@@ -115,4 +115,20 @@ public class Course {
     public void setNumberOfSlots(int numberOfSlots) {
         this.numberOfSlots = numberOfSlots;
     }
+
+    public Prerequisite getPrerequisite() {
+        return prerequisite;
+    }
+
+    public void setPrerequisite(Prerequisite prerequisite) {
+        this.prerequisite = prerequisite;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 }
