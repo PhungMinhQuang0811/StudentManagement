@@ -43,7 +43,7 @@ public class Mark {
     @JoinColumn(name = "course_type_id",nullable = false)
     private CourseType courseType;
 
-    public Mark(int courseId, double pt1, double pt2, double lab1, double lab2, double assignment, double PE, double FE) {
+    public Mark(int courseId, double pt1, double pt2, double lab1, double lab2, double assignment, double PE, double FE, Status status) {
         this.courseId = courseId;
         this.pt1 = pt1;
         this.pt2 = pt2;
@@ -52,6 +52,7 @@ public class Mark {
         this.assignment = assignment;
         this.PE = PE;
         this.FE = FE;
+        this.status = status;
     }
 
     public Mark() {
@@ -119,5 +120,22 @@ public class Mark {
 
     public void setFE(double FE) {
         this.FE = FE;
+    }
+
+    @Override
+    public String toString() {
+        return "Mark{" +
+                "courseId=" + courseId +
+                ", pt1=" + pt1 +
+                ", pt2=" + pt2 +
+                ", lab1=" + lab1 +
+                ", lab2=" + lab2 +
+                ", assignment=" + assignment +
+                ", PE=" + PE +
+                ", FE=" + FE +
+                ", status=" + status +
+                ", course=" + course +
+                ", courseType=" + courseType +
+                '}';
     }
 }

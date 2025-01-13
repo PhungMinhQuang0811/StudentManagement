@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import vn.pmq.spring.studentmanagement.Model.Prerequisite;
 
 @Repository
-public interface prerequisiteRepository extends JpaRepository<Prerequisite,Long> {
+public interface prerequisiteRepository extends JpaRepository<Prerequisite,Integer> {
 }
