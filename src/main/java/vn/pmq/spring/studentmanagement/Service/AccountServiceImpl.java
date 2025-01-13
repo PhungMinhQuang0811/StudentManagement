@@ -3,11 +3,12 @@ package vn.pmq.spring.studentmanagement.Service;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import vn.pmq.spring.studentmanagement.DAO.AccountDAO;
+import vn.pmq.spring.studentmanagement.Model.Profile;
 import vn.pmq.spring.studentmanagement.Model.Role;
 import vn.pmq.spring.studentmanagement.Model.Status;
 import vn.pmq.spring.studentmanagement.Repository.AccountRepository;
 import vn.pmq.spring.studentmanagement.Model.Account;
+import vn.pmq.spring.studentmanagement.Repository.ProfileRepository;
 import vn.pmq.spring.studentmanagement.Repository.RoleRepository;
 import vn.pmq.spring.studentmanagement.Repository.StatusRepository;
 
@@ -16,15 +17,15 @@ import java.util.List;
 @Service
 public class AccountServiceImpl implements AccountService {
     private AccountRepository accountRepository;
+    private ProfileRepository profileRepository;
     private StatusRepository statusRepository;
     private RoleRepository roleRepository;
-    private AccountDAO accountDAO;
     @Autowired
-    public AccountServiceImpl(AccountRepository accountRepository,StatusRepository statusRepository,RoleRepository roleRepository, AccountDAO accountDAO) {
+    public AccountServiceImpl(AccountRepository accountRepository,ProfileRepository profileRepository,StatusRepository statusRepository,RoleRepository roleRepository) {
         this.accountRepository = accountRepository;
+        this.profileRepository = profileRepository;
         this.statusRepository = statusRepository;
         this.roleRepository = roleRepository;
-        this.accountDAO = accountDAO;
     }
 
     @Override
@@ -56,12 +57,21 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     public Account changeStatus(int id) {
         Account account = accountRepository.getById(id);
-        return accountDAO.changeStatus(account);
+        int currentStatusId = account.getStatus().getstatusId();
+        if (currentStatusId == 1) {
+            Status newStatus = statusRepository.getById(2);
+            account.setStatus(newStatus);
+        } else if (currentStatusId == 2) {
+            Status newStatus = statusRepository.getById(1);
+            account.setStatus(newStatus);
+        }
+        accountRepository.saveAndFlush(account);
+        return account;
     }
 
     @Override
-    public List<Account> findByUsernameContaining(String username) {
-        return accountRepository.findByUserNameContainingIgnoreCase(username);
+    public List<Account> findByUsername(String username) {
+        return accountRepository.findByUserNameIgnoreCase(username);
     }
 
     @Transactional
@@ -71,4 +81,20 @@ public class AccountServiceImpl implements AccountService {
         account.getRoles().addAll(roleList);
         accountRepository.saveAndFlush(account);
     }
+    public int getMaxId() {
+        return accountRepository.findMaxId();
+    }
+
+    @Override
+    public Account findByIdCard(String idCard) {
+        return accountRepository.findByIdCard(idCard);
+    }
+
+    @Override
+    public List<Account> findByRole(int roleId) {
+        return accountRepository.findByRole(roleId);
+    }
+
+
+
 }

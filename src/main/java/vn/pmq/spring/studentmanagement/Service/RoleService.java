@@ -8,4 +8,5 @@ public interface RoleService {
     public List<Role> findAll();
     public Role findById(int id);
     public List<Role> getRolesByIds(List<Integer> roleIds);
+    public List<Role> getRolesByAccount(int accountId);
 }

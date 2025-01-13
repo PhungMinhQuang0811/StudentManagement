@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Account Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
 </head>
 <body>
 <div th:include="fragments/header.html"></div>
@@ -12,6 +13,14 @@
         <h3>Account Management</h3>
         <form th:action="@{/accounts/search}" method="get" class="d-inline">
             <input type="text" name="username" class="form-control d-inline w-auto" placeholder="Search by username">
+            <input type="text" name="idCard" class="form-control d-inline w-auto" placeholder="Search by id card number" pattern="\d{12}">
+            <select name="role" class="form-select d-inline w-auto">
+                <option value="" disabled selected>Choose a role</option>
+                <option th:each="role : ${roles}"
+                        th:value="${role.getroleId()}"
+                        th:text="${role.getName()}">
+                </option>
+            </select>
             <button type="submit" class="btn btn-primary">Search</button>
         </form>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAccountModal">
@@ -22,10 +31,10 @@
             <thead>
             <tr>
                 <th>Username</th>
-                <th>Fullname</th>
+                <th>Id card</th>
                 <th>Email</th>
                 <th>Phone</th>
-                <th>Password</th>
+                <th>Gender</th>
                 <th>Role</th>
                 <th>Status</th>
                 <th>Action</th>
@@ -34,10 +43,10 @@
             <tbody>
             <tr th:each="account : ${accounts}">
                 <td th:text="${account.getUserName()}"></td>
-                <td th:text="${account.getFullName()}"></td>
+                <td th:text="${account.profile != null ? account.profile.getidCard() : ''}"></td>
                 <td th:text="${account.getEmail()}"></td>
                 <td th:text="${account.getPhone()}"></td>
-                <td th:text="${account.getPassword()}"></td>
+                <td th:text="${account.profile != null ? (account.profile.gender ? 'Male' : 'Female') : ''}"></td>
                 <td>
                     <ul>
                         <li th:each="role : ${account.getRoles()}" th:text="${role.name}"></li>
@@ -59,7 +68,7 @@
                     </a>
                 </td>
 
-                <!-- Modal -->
+                <!-- update Modal -->
                 <div class="modal fade" th:id="'updateAccountModal-' + ${account.getAccountId()}" tabindex="-1" aria-labelledby="updateAccountModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -87,15 +96,45 @@
                                         <input type="text" class="form-control"  name="password" th:value="${account.getPassword()}" required>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="roleIds" class="form-label">Role</label>
-                                        <select class="form-select" id="roleIds" name="roleIds" multiple required>
-                                            <option value="" disabled>Select roles</option>
-                                            <option th:each="role : ${roles}"
-                                                    th:value="${role.getroleId()}"
-                                                    th:text="${role.name}"
-                                                    th:selected="${account.roles.contains(role)}"> <!-- Pre-select roles that the account already has -->
-                                            </option>
+                                        <label for="idCard" class="form-label">ID Card</label>
+                                        <input type="text" class="form-control" name="idCard"
+                                               th:value="${account.profile != null ? account.profile.getidCard() : ''}" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="gender" class="form-label">Gender</label>
+                                        <select class="form-control" name="gender" required>
+                                            <option th:value="true" th:selected="${account.profile != null and account.profile.isGender()}">Male</option>
+                                            <option th:value="false" th:selected="${account.profile != null and !account.profile.isGender()}">Female</option>
                                         </select>
+                                    </div>
+
+                                    <!-- Fields for Staff -->
+                                    <div th:if="${account.staff != null}" >
+                                        <div class="mb-3">
+                                            <label for="position" class="form-label">Position</label>
+                                            <select class="form-control" name="position" required>
+                                                <option value="subjectHead" th:selected="${account.staff.position == 'subjectHead'}">Subject Head</option>
+                                                <option value="teacher" th:selected="${account.staff.position == 'teacher'}">Teacher</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="major-staff" class="form-label">Major</label>
+                                            <select class="form-control" name="majorStaff" required>
+                                                <option value="SE" th:selected="${account.staff.major == 'SE'}">Software Engineering</option>
+                                                <option value="MKT" th:selected="${account.staff.major == 'MKT'}">Marketing</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Fields for Student -->
+                                    <div th:if="${account.student != null}">
+                                        <div class="mb-3">
+                                            <label for="major-student" class="form-label">Major</label>
+                                            <select class="form-control" name="majorStudent" required>
+                                                <option value="SE" th:selected="${account.student.major == 'SE'}">Software Engineering</option>
+                                                <option value="MKT" th:selected="${account.student.major == 'MKT'}">Marketing</option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <!-- Add more fields as necessary -->
                                     <button type="submit" class="btn btn-primary">Save Changes</button>
@@ -136,19 +175,66 @@
                             <input type="text" class="form-control" id="password" name="password" th:field="*{password}" required>
                         </div>
                         <div class="mb-3">
-                            <label for="roles" class="form-label">Role</label>
-                            <select class="form-select" id="roles" name="roleIds" multiple required>
-                                <option th:each="role : ${roles}"
-                                        th:value="${role.getroleId()}"
-                                        th:text="${role.getName()}">
-                                </option>
+                            <label for="idCard" class="form-label">ID Card</label>
+                            <input type="text" class="form-control" id="idCard" name="idCard" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="gender" class="form-label">Gender</label>
+                            <select class="form-control" id="gender" name="gender" required>
+                                <option value="true">Male</option>
+                                <option value="false">Female</option>
                             </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="roles" class="form-label">Role</label>
+                            <div id="roles">
+                                <div th:each="role : ${roles}">
+                                    <input type="checkbox" class="form-check-input role-checkbox"
+                                           name="roleIds"
+                                           th:value="${role.getroleId()}"
+                                           th:text="${role.getName()}"
+                                           th:onclick="'toggleFields(this, ' + ${role.getroleId()} + ')'"
+                                           th:id="'role-' + ${role.getroleId()}"
+                                           th:disabled="${role.getroleId() == 1}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="invalid-feedback" id="role-validation-message" style="display: none;">
+                            Please select at least one role.
+                        </div>
+                        <!-- Fields for Staff -->
+                        <div id="field-2" style="display: none;">
+                            <div class="mb-3">
+                                <label for="position" class="form-label">Position</label>
+                                <select class="form-control" id="position" name="position" required>
+                                    <option value="subjectHead">subject head</option>
+                                    <option value="teacher">teacher</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="major-staff" class="form-label">Major</label>
+                                <select class="form-control" id="major-staff" name="majorStaff" required>
+                                    <option value="SE">Software engineering</option>
+                                    <option value="MKT">Marketing</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Fields for Student -->
+                        <div id="field-4" style="display: none;">
+                            <div class="mb-3">
+                                <label for="major-student" class="form-label">Major</label>
+                                <select class="form-control" id="major-student" name="majorStudent" required>
+                                    <option value="SE">Software engineering</option>
+                                    <option value="MKT">Marketing</option>
+                                </select>
+                            </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" form="addAccountForm">Save Account</button>
+                    <button type="submit" class="btn btn-primary" form="addAccountForm" onclick="validateRoles(event)">Save Account</button>
                 </div>
             </div>
         </div>
@@ -158,12 +244,76 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // JavaScript function to open the modal dynamically
-    function openModal(accountId) {
-        // Show the modal corresponding to the accountId
-        var modalId = '#updateAccountModal-' + accountId;
-        var myModal = new bootstrap.Modal(document.querySelector(modalId));
-        myModal.show();
+    function toggleFields(checkbox, roleId) {
+        console.log(`Role ID: ${roleId}, Checked: ${checkbox.checked}`); // Debugging log
+        var fields = document.getElementById('field-' + roleId);
+        var roleElement = document.getElementById('role-' + roleId);
+        if (fields) {
+            fields.style.display = checkbox.checked ? 'block' : 'none';
+        } else {
+            console.error(`No fields found for role ID: ${roleId}`); // Debugging log
+        }
+        if(checkbox.checked){
+            if (roleId === 2) {
+                document.getElementById('role-3').style.display = 'none'; // Hide checkbox 3
+                document.getElementById('role-4').style.display = 'none'; // Hide checkbox 4
+            }
+            // If checkbox 4 is checked, hide checkboxes 1, 2, and 3
+            if (roleId === 4) {
+                document.getElementById('role-1').style.display = 'none'; // Hide checkbox 1
+                document.getElementById('role-2').style.display = 'none'; // Hide checkbox 2
+                document.getElementById('role-3').style.display = 'none'; // Hide checkbox 3
+            }
+        }
+        else {
+            if (roleId === 2) {
+                document.getElementById('role-3').style.display = 'block'; // Hide checkbox 3
+                document.getElementById('role-4').style.display = 'block'; // Hide checkbox 4
+            }
+            // If checkbox 4 is checked, hide checkboxes 1, 2, and 3
+            if (roleId === 4) {
+                document.getElementById('role-1').style.display = 'block'; // Hide checkbox 1
+                document.getElementById('role-2').style.display = 'block'; // Hide checkbox 2
+                document.getElementById('role-3').style.display = 'block'; // Hide checkbox 3
+            }
+        }
+    }
+
+    function validateRoles(event) {
+        const checkboxes = document.querySelectorAll('.role-checkbox');
+        const validationMessage = document.getElementById('role-validation-message');
+        const isChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+
+        if (!isChecked) {
+            event.preventDefault(); // Prevent form submission
+            validationMessage.style.display = 'block'; // Show the validation message
+        } else {
+            validationMessage.style.display = 'none'; // Hide the validation message
+        }
+    }
+    document.querySelectorAll('.role-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            const checkboxes = document.querySelectorAll('.role-checkbox');
+            const validationMessage = document.getElementById('role-validation-message');
+            const isChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+
+            if (isChecked) {
+                validationMessage.style.display = 'none'; // Hide the validation message
+            }
+        });
+    });
+</script>
+<script>
+    // JavaScript function to show/hide fields based on role selection
+    function toggleFields() {
+        const role2Checked = document.getElementById('role-2').checked; // Role 2 checkbox
+        const role4Checked = document.getElementById('role-4').checked; // Role 4 checkbox
+
+        // Show or hide fields for staff (role 2)
+        document.getElementById('field-2').style.display = role2Checked ? 'block' : 'none';
+
+        // Show or hide fields for student (role 4)
+        document.getElementById('field-4').style.display = role4Checked ? 'block' : 'none';
     }
 </script>
 </body>

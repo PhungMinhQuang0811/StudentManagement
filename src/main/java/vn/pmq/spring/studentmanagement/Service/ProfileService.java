@@ -10,4 +10,6 @@ import java.util.List;
 public interface ProfileService {
     public List<Profile> getProfiles();
     public Profile addProfile(Profile profile);
+    public Profile getProfileByAccountId(int accountId);
+    public Profile updateProfile(Profile profile);
 }

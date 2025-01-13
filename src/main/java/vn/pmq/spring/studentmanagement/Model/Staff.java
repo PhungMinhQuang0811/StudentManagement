@@ -72,7 +72,50 @@ public class Staff {
         this.staffCode = staffCode;
     }
 
+    public int getStaffId() {
+        return staffId;
+    }
+
+    public void setStaffId(int staffId) {
+        this.staffId = staffId;
+    }
+
+    public String getMemberCode() {
+        return memberCode;
+    }
+
+    public void setMemberCode(String memberCode) {
+        this.memberCode = memberCode;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public List<Feedback> getFeedbacks() {
+        return feedbacks;
+    }
+
+    public void setFeedbacks(List<Feedback> feedbacks) {
+        this.feedbacks = feedbacks;
+    }
+
     public void setMajor(String major) {
         this.major = major;
+    }
+
+    @Override
+    public String toString() {
+        return "Staff{" +
+                "staffId=" + staffId +
+                ", position='" + position + '\'' +
+                ", memberCode='" + memberCode + '\'' +
+                ", staffCode='" + staffCode + '\'' +
+                ", major='" + major + '\'' +
+                '}';
     }
 }
