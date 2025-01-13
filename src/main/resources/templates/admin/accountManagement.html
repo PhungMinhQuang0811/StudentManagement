@@ -8,9 +8,9 @@
 </head>
 <body>
 <div th:include="fragments/header.html"></div>
+<div th:include="fragments/navbar.html"></div>
 <main role="main">
     <div class="container">
-        <h3>Account Management</h3>
         <form th:action="@{/accounts/search}" method="get" class="d-inline">
             <input type="text" name="username" class="form-control d-inline w-auto" placeholder="Search by username">
             <input type="text" name="idCard" class="form-control d-inline w-auto" placeholder="Search by id card number" pattern="\d{12}">
@@ -240,7 +240,6 @@
         </div>
     </div>
 </main>
-
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
